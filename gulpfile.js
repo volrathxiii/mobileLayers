@@ -87,6 +87,18 @@ gulp.task('clean-source', function() {
 	return true;
 });
 
+gulp.task('clean-source:js', function() {
+	gutil.log('Removing source files...');
+	del(SCRIPT_FILE);
+	return true;
+});
+
+gulp.task('clean-source:css', function() {
+	gutil.log('Removing source files...');
+	del(STYLE_FILE);
+	return true;
+});
+
 gulp.task('test-files-reload', function()
 {
 	return gulp.pipe(reload({stream: true}));
@@ -95,7 +107,7 @@ gulp.task('test-files-reload', function()
 /*!
  *	Build JS for dev
  */
-gulp.task('build-js',['clean-source','gitInfo'], function()
+gulp.task('build-js',['clean-source:js','gitInfo'], function()
 {
 	gutil.log('Compiling to '+ SCRIPT_FILE);
 	d = new Date(),
@@ -141,7 +153,7 @@ gulp.task('build-js:min', function()
 /*!
  *  SASS TASK RUNNERS
  */
-gulp.task('build-css', ['clean-source','gitInfo'] ,function() {
+gulp.task('build-css', ['clean-source:css','gitInfo'] ,function() {
 	d = new Date(),
 	headerComment = '/*!\n * Branch: ' + gitBranch + '\n * Commit: #' + gitHash + '\n * Date: ' + d +'\n */\n';
 	return gulp.src(STYLES_DIR+'/styles.scss')
