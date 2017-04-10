@@ -1,0 +1,24 @@
+.ml-layer {
+	&.ml-offcanvas {
+		transition: all .5s ease;
+		left: 100%;
+
+		&.ml-active {
+			left: 0;
+		}
+	}
+
+	// fadeout effect
+	&.ml-opened:not(.ml-active), &.ml-last {
+		&.ml-offcanvas-right {
+			left: -100%;
+		}
+	}
+
+	// fadein effect from previous
+	&.ml-last {
+		html.ml-previous & {
+			left: 100%;
+		}
+	}
+}

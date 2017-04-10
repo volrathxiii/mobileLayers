@@ -26,6 +26,7 @@ var SOURCE_DIR = './source';
 var TESTS_DIR = './tests';
 var STYLES_DIR = SOURCE_DIR + '/css/styles';
 var SCRIPTS_DIR = SOURCE_DIR + '/js/scripts';
+var SCRIPT_MODULES_DIR = SCRIPTS_DIR+'/modules';
 var SCRIPT_FILE_NAME = 'mobilelayer.dev.js';
 var STYLE_FILE_NAME = 'mobilelayer.dev.css';
 var SCRIPT_FILE = SOURCE_DIR + '/' + SCRIPT_FILE_NAME;
@@ -112,7 +113,12 @@ gulp.task('build-js',['clean-source:js','gitInfo'], function()
 	gutil.log('Compiling to '+ SCRIPT_FILE);
 	d = new Date(),
 	headerComment = '/*!\n * Branch: ' + gitBranch + '\n * Commit: #' + gitHash + '\n * Date: ' + d +'\n */\n';
-	return gulp.src( [SCRIPTS_DIR+'/**/*.js'] )
+	return gulp.src( [
+		SCRIPTS_DIR+'/controller.js',
+		SCRIPTS_DIR+'/layer.js',
+		SCRIPT_MODULES_DIR+'/**/*.js',
+		SCRIPTS_DIR+'/init.js',
+		] )
 	.pipe(sourcemaps.init())
 	.pipe(concat( SCRIPT_FILE_NAME ))
 	.pipe(gutil.env.comments === 'disabled' ? gutil.noop() : strip({'safe':true,'trim':true}))
