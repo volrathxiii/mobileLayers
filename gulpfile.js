@@ -114,8 +114,9 @@ gulp.task('build-js',['clean-source:js','gitInfo'], function()
 	d = new Date(),
 	headerComment = '/*!\n * Branch: ' + gitBranch + '\n * Commit: #' + gitHash + '\n * Date: ' + d +'\n */\n';
 	return gulp.src( [
-		SCRIPTS_DIR+'/controller.js',
-		SCRIPTS_DIR+'/layer.js',
+		SCRIPTS_DIR+'/layers.controller.js',
+		SCRIPTS_DIR+'/layer.controller.js',
+		SCRIPTS_DIR+'/mobilelayers.js',
 		SCRIPT_MODULES_DIR+'/**/*.js',
 		SCRIPTS_DIR+'/init.js',
 		] )
