@@ -3,6 +3,9 @@
  */
 @import '../libs/bourbon/bourbon';
 
+@import 'variables';
+
 @import 'site';
 @import 'layers';
 @import 'offcanvas';
+@import 'header';

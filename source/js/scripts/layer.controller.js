@@ -2,10 +2,11 @@
  *	Layers
  */
 
-(function (window) {
+(function (Strata) {
 	// var __mLayersList = __mLayersList || {};
 
 	var _opened = false;
+
 	// Helpers
 	var GenerateID = function(prefix) {
 		return prefix+'_'+Math.round(new Date().getTime() + (Math.random() * 100000));
@@ -18,6 +19,7 @@
 
 	var LayerController = function(config) {
 		if(typeof config !== 'object') return false;
+
 		this.id = false;
 		this.element = false;
 		this.active = false;
@@ -41,6 +43,8 @@
 		if(elementId === 'undefined') elementId = GenerateID('mlayer');
 		this.id = elementId;
 
+		this.config.parent.trigger('beforeCreate', element);
+
 		// if(typeof __mLayersList[this.id] === 'object') return;
 		var fadeInClass = 'ml-' + this.config.layer.type +'-'+ this.config.layer.position;
 		var typeClass = 'ml-' + this.config.layer.type;
@@ -55,25 +59,42 @@
 
 		this.element = newLayer;
 		this.config.parent.append(this.element);
+
+		this.config.parent.trigger('afterCreate', this);
 		// __mLayersList[this.id] = this;
 	};
 
+	// setActive
+	LayerController.prototype.setActive = function(id) {
+		$.each(Strata.controllers.layers.list, function(layerID, layer) {
+			if(layerID === id) {
+				layer.active = true;
+			} else {
+				layer.active = false;
+			}
+		});
+	};
 
 	// set active layer as opened
 	LayerController.prototype.setOpened = function() {
-		var current = LayersController.getOpened();
+		var current = Strata.controllers.layers.getOpened();
 		if(typeof current === 'object') current.opened = false;
-		// LayersController.getOpened().opened = false;
+		// Strata.controllers.layers.getOpened().opened = false;
 		this.opened = true;
 		_opened = this.id;
 	};
 
 	// set as last item opened
-	LayerController.prototype.setLast = function() {
-		var current = LayersController.getLast();
-		if(typeof current === 'object') current.last = false;
-		// LayersController.getOpened().opened = false;
-		this.last = true;
+	LayerController.prototype.setLast = function(id) {
+		console.log('last',id);
+		if(typeof id === 'undefined') id = this.id;
+		$.each(Strata.controllers.layers.list, function(layerID, layer) {
+			if(layerID === id) {
+				layer.last = true;
+			} else {
+				layer.last = false;
+			}
+		});
 	};
 
 	LayerController.prototype.open = function() {
@@ -86,14 +107,15 @@
 		// if(typeof __mLayersList[ _opened ] === 'object') {
 		// 	__mLayersList[ _opened ].close();
 		// }
-		// var last = LayersController.getLast();
+		// var last = Strata.controllers.layers.getLast();
 		// console.error('error', last);
 		// if(last && last.id !== _this.id) last.close();
 
 		// set opened
 		// _opened = _this.id;
 
-		_this.setOpened();
+		this.setOpened();
+		this.setActive(this.id);
 
 		// do reset first
 		// @TODO Move to private function
@@ -132,6 +154,6 @@
 		},_this.config.animation.time);
 	};
 
-	window.LayerController = LayerController;
+	Strata.controllers.layer = LayerController;
 
-}(window));
+}(Strata));
