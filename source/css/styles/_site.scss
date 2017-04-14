@@ -12,4 +12,8 @@ html.ml-inited {
 		position: relative;
 		overflow: hidden;
 	}
+
+	&-config {
+		display: none !important;
+	}
 }

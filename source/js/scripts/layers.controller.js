@@ -17,13 +17,17 @@
 		// from so that we can open back this will be helpful if we want a global header
 		var history = [];
 
+		var moduleTrigger = function(action, parameters) {
+			Strata.modules.trigger({'controller':'layers','action':action,'parameters': parameters});
+		};
+
 		var add = function(element, options) {
-			console.log('add', element,options)
 			if((typeof element !== 'string' && typeof element !== 'object') || typeof options !== 'object') return;
 			var newLayer = new Strata.controllers.layer(options);
 			newLayer.create(element);
 
 			list[newLayer.id] = newLayer;
+			moduleTrigger('add',{'layer': list[newLayer.id]});
 		};
 
 		var get = function(id) {
@@ -58,6 +62,7 @@
 			$.each(list, function(layerID,layer){
 				if(layerID === id) {
 					layer.element.addClass('ml-active');
+					moduleTrigger('setActive',{'layer': layer});
 				} else {
 					layer.element.removeClass('ml-active');
 				}
@@ -82,7 +87,9 @@
 				// $('html').removeClass('ml-previous').addClass('ml-next');
 				// set last layercontroller
 				setActive(id);
+				moduleTrigger('openLayerStart',{'layer': list[ id ]});
 				list[ id ].open();
+				moduleTrigger('openLayerEnd',{'layer': list[ id ]});
 			}
 		};
 
@@ -94,21 +101,23 @@
 			if(activeLayer && lastLayer) {
 				// $('html').removeClass('ml-next').addClass('ml-previous');
 				activeLayer.element.removeClass('ml-opened');
+				moduleTrigger('closeLayerStart',{'layer': activeLayer});
 				openLayer(lastLayer.id);
+				moduleTrigger('closeLayerEnd',{'layer': activeLayer});
 			}
 		};
 
 		var autoLayers = function(options) {
 			if(typeof options === 'undefined') options = userConfig;
 			
-			if(!options.auto_layer) return false;
+			if(!options.autoLayer) return false;
 			var _this = $(this);
-			$('.'+options.auto_layer).each(function(){
+			$('.'+options.autoLayer).each(function(){
 				// var newLayer = new Strata.layer(options);
 				// newLayer.create($(this));
 				// add(newLayer);
-				console.log('autolayers', _this.add);	
 				add($(this), options);
+				moduleTrigger('autoLayers',{'element': $(this), 'options': options});
 			});
 		};
 
@@ -117,7 +126,6 @@
 			var _body; 
 			_body = $('body');
 
-			console.log(options);
 			var fadeInClass = 'ml-' + Strata.config.layer.type +'-'+ Strata.config.layer.position;
 			var typeClass = 'ml-' + Strata.config.layer.type;
 
@@ -129,6 +137,7 @@
 			$('body').prepend(options.parent);
 
 			$('html').addClass('ml-inited');
+			moduleTrigger('setupDOM',{'options': options});
 		};
 
 		var _attachListeners = function(){
@@ -151,6 +160,8 @@
 				e.preventDefault();
 				closeLayer();
 			});
+
+			moduleTrigger('attachListers',{});
 		};
 
 		var init = function(options) {
@@ -159,15 +170,20 @@
 			// initialize domTree
 			_setupDOMTree(options);
 
-			add('#'+options.home_layer, options);
+			add('#ml-home', options);
+
+			if(options.homeLayer !== 'ml-home') {
+				get('ml-home').element.addClass('ml-opened');
+			}
 
 			autoLayers(options);
 
-			openLayer(options.home_layer);
+			openLayer(options.homeLayer);
 
 			_attachListeners();
 
 			_inited = true;
+			moduleTrigger('init',{'options': options});
 		};
 
 		return {

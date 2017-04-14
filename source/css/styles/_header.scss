@@ -1,7 +1,91 @@
 $header-height: 50px !default;
+$buttons-width: $header-height;
+
+$header-background: #e8e8e8;
 
 .ml-header {
-	&-site {
-		height: 0;
+	height: $header-height;
+	z-index: 4;
+	position: relative;
+	background: $header-background;
+	width: 100%;
+
+	.ml-buttons {
+		width: $buttons-width;
+		height: $header-height;
+		position: absolute;
+		z-index: 1;
+		top: 0;
+
+
+		&-left {
+			left: 0;
+		}
+		&-right {
+			right: 0;
+		}
 	}
+	// buttons
+	.ml-close, .ml-open {
+		opacity: 1;
+		z-index: 1; 
+		transition: all $animation-time ease;
+		position: relative;
+	}
+
+	.ml-title-container {
+		margin-left: $buttons-width;
+		margin-right: $buttons-width;
+		height: $header-height;
+		position: relative;
+		overflow: hidden;
+	}
+
+	.ml-title {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		text-align: center;
+		transition: left $animation-time ease;
+	}
+
+	&-home {
+		.ml-close, .ml-open {
+			opacity: 0;
+			z-index: -1;
+		}
+	}
+
+	&-site {
+		margin-left: -100%;
+		transition: margin-left $animation-time ease;
+
+		html.ml-header-opened & {
+			margin-left: 0;
+		}
+
+		.ml-title {
+			// go right
+			html.ml-next &, html.ml-back & {
+				left: 100%;
+			}
+
+			// go left
+			html.ml-back &-opened, html.ml-next &-opened {
+				left: -100%;
+			}
+
+			&-active {
+				left: 0 !important;
+			}
+		}
+	}
+}
+
+
+.ml-layer.ml-header-enabled {
+	padding-top: $header-height;
+	// html.ml-header-opened &{
+	// 	padding-top: $header-height;
+	// }
 }
