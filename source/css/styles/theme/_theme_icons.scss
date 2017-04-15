@@ -1,0 +1,6 @@
+// main menu icon
+.ml-header .ml-open[href='#menu'] {
+	@extend .icn;
+	@extend .icn-menu-hamburger;
+	font-size: $theme-header-icon-size;
+}

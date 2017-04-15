@@ -58,6 +58,17 @@
 			return history[ history.length - 2 ];
 		};
 
+		var setLastActive = function() {
+			$.each(list, function(layerID,layer){
+				if(layer.last) {
+					layer.element.addClass('ml-last');
+					moduleTrigger('setLastActive',{'layer': layer});
+				} else {
+					layer.element.removeClass('ml-last');
+				}
+			});
+		};
+
 		var setActive = function(id) {
 			$.each(list, function(layerID,layer){
 				if(layerID === id) {
@@ -86,9 +97,11 @@
 				}
 				// $('html').removeClass('ml-previous').addClass('ml-next');
 				// set last layercontroller
+				
 				setActive(id);
 				moduleTrigger('openLayerStart',{'layer': list[ id ]});
 				list[ id ].open();
+				setLastActive();
 				moduleTrigger('openLayerEnd',{'layer': list[ id ]});
 			}
 		};

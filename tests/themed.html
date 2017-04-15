@@ -1,20 +1,24 @@
 <html>
 <head>
-	<title>mobileLayers.js</title>
+	<title>Themed Strata</title>
 	<script type="text/javascript" src="../source/js/libs/jquery.1.12.4.js"></script>
 	<script type="text/javascript" src="../source/strata.dev.js"></script>
 	<link rel="stylesheet" type="text/css" href="../source/styles.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
 <body>
-	<h1 class="ml-config" config-header-title="Home page">Home page</h1>
-	<h1>Mobile Layer Home</h1>
-	<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
-	<a href="#menulayer" class="ml-open">Menu</a>
-	<a href="#loginlayer" class="ml-open">Login</a>
+	<span class="ml-config" config-header-title="Home" config-header-buttons-right="false" config-header-buttons-left="openButton('#menu','')"></span>
+	<label>Welcome!</label>
+	<p>Strata.js is a layer framework for mobile but it can also be used for desktop. It comes with a lot of features such as offcanvas, split and popup layers.</p>
+	<p>You can also create your own custom modules or enjoy the build it modules such as header, footer, API, etc. You can also create your own theme, if you want to.</p>
+	<label>Default layers example</label>
+	<div class="list-item">
+		<a href="#menu" class="ml-open">Split<span class="pull-right faded">Menu Layer</span></a>
+		<a href="#loginlayer" class="ml-open">Popup<span class="pull-right faded">Login Layer</span></a>
+		<a href="#layer1" class="ml-open">Offcanvas<span class="pull-right faded">Layer 1</span></a>
+	</div>
 
-
-	<div id="menulayer" class="auto-ml" config-header-type="layer" config-header-title="Menu" config-header-buttons-home='false' config-layer-type="split" config-layer-position="left">
+	<div id="menu" class="auto-ml" config-header-type="layer" config-header-title="Menu" config-header-buttons-home='false' config-layer-type="split" config-layer-position="left">
 		<a href="#layer1" class="ml-open">Layer1</a>
 		<a data-target="#layer2" class="ml-open">Layer2</a>
 		<h1>menu goes here</h1>

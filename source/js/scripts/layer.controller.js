@@ -113,6 +113,22 @@
 		});
 	};
 
+	var triggerBlocker = function(layer) {
+		// remove all blockers
+		Strata.config.parent.find('.ml-blocker').remove();
+		$('html').removeClass('ml-blocker-opened');
+		if(layer.config.layer.type === 'split' || layer.config.layer.type === 'popup') {
+			$('html').addClass('ml-blocker-opened');
+			var $blocker = $('<div>', {'class':'ml-blocker'});
+			$blocker.insertAfter(layer.element);
+
+			$blocker.off('click').on('click', function(e){
+				Strata.layers.closeLayer();
+			});
+			moduleTrigger('openBlocker',{'layer':layer});
+		}
+	};
+
 	LayerController.prototype.open = function() {
 		var _this = this;
 		if(_opened === _this.id) return; // dont do anything if layer is current opened and active
@@ -129,6 +145,7 @@
 
 		// set opened
 		// _opened = _this.id;
+		triggerBlocker(_this);
 
 		this.setOpened();
 		this.setActive(this.id);
@@ -142,7 +159,7 @@
 		// },1);
 		moduleTrigger('openStart',{'layer':this});
 		_this.element.trigger('openStart', _this);
-		_this.element.removeClass('ml-last').addClass('ml-target ml-opening');
+		_this.element.addClass('ml-target ml-opening');
 
 		setTimeout(function(){
 			_this.element.removeClass('ml-target ml-opening');

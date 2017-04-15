@@ -1,14 +1,15 @@
 $header-height: 50px !default;
 $buttons-width: $header-height;
 
-$header-background: #e8e8e8;
+$header-background: #f4f4f4;
 
 .ml-header {
 	height: $header-height;
 	z-index: 4;
-	position: relative;
+	position: absolute;
 	background: $header-background;
 	width: 100%;
+	top: 0;
 
 	.ml-buttons {
 		width: $buttons-width;
@@ -16,7 +17,6 @@ $header-background: #e8e8e8;
 		position: absolute;
 		z-index: 1;
 		top: 0;
-
 
 		&-left {
 			left: 0;
@@ -43,25 +43,26 @@ $header-background: #e8e8e8;
 
 	.ml-title {
 		position: absolute;
-		top: 0;
+		top: 50%;
+		transform: translate(0,-50%);
 		width: 100%;
 		text-align: center;
 		transition: left $animation-time ease;
 	}
 
-	&-home {
-		.ml-close, .ml-open {
-			opacity: 0;
-			z-index: -1;
-		}
-	}
+	// &-home {
+	// 	.ml-close, .ml-open {
+	// 		opacity: 0;
+	// 		z-index: -1;
+	// 	}
+	// }
 
 	&-site {
-		margin-left: -100%;
-		transition: margin-left $animation-time ease;
+		left: -100%;
+		transition: left $animation-time ease;
 
 		html.ml-header-opened & {
-			margin-left: 0;
+			left: 0;
 		}
 
 		.ml-title {
@@ -83,7 +84,7 @@ $header-background: #e8e8e8;
 }
 
 
-.ml-layer.ml-header-enabled {
+.ml-layer.ml-header-enabled, .ml-layer.ml-has-header {
 	padding-top: $header-height;
 	// html.ml-header-opened &{
 	// 	padding-top: $header-height;

@@ -1,0 +1,30 @@
+$blocker-background: rgba(0,0,0,.5) !default;
+$blocker-filter-blur: 3px !default;
+
+%blocker-last-panel {
+	-webkit-filter: blur($blocker-filter-blur);
+	-moz-filter: blur($blocker-filter-blur);
+	-o-filter: blur($blocker-filter-blur);
+	-ms-filter: blur($blocker-filter-blur);
+	filter: blur($blocker-filter-blur);
+}
+
+.ml-blocker {
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $blocker-background;
+    z-index: 5;
+
+	// &-opened {
+	// 	.ml-layer.ml-last {
+	// 		@extend %blocker-last-panel;
+	// 	}
+	// }
+}
+
+html.ml-blocker-opened .ml-header-site {
+	z-index: 3;
+}

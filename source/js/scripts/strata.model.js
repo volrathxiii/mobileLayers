@@ -20,8 +20,8 @@
 				'class': 'ml-header',
 				'title': false,
 				'buttons': {
-					'back': true,
-					'home': true
+					'left': 'backButton("Back")',
+					'right': 'openButton("#ml-home","Home")'
 				},
 				'type': 'site' // site|layer
 			},

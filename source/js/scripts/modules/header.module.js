@@ -12,25 +12,36 @@
 		}
 	};
 
+	// buttons options
+	var backButton = function(text) {
+		return $('<a>', {'class':'ml-button ml-close','href':'javascript:void(0)'}).html(text);
+	};
+
+	var openButton = function(link,text) {
+		return $('<a>', {'class':'ml-button ml-open','href':link}).html(text);
+	};
+
 	var createHeader = function(layer, config, type) {
 		var template = "<div class='ml-header ml-header-"+type+"'>"+config.template+"</div>";
 
 		var titleWrapper, back, home;
 
-		var backbutton = "";
+		// var backbutton = "";
 
-		if(JSON.parse(config.buttons.back)) {
-			back = "<a href='javascript:void(0)' class='ml-close'>Back</a>";
-			backbutton = "<div class='ml-buttons ml-buttons-left'>"+back+"</div>";
-		}
+		// if(config.buttons.back) {
+		// 	back = "<a href='javascript:void(0)' class='ml-close'>Back</a>";
+		// 	backbutton = "<div class='ml-buttons ml-buttons-left'>"+back+"</div>";
+		// }
+		var backbutton = "<div class='ml-buttons ml-buttons-left'></div>";
 		template = template.replace('{{back}}', backbutton);
 
-		var homeButton = "";
-		if(JSON.parse(config.buttons.home)) {
-			// <a data-target="#layer2" class="ml-open">Layer2</a>
-			home = "<a class='ml-open' href='#"+Strata.config.homeLayer+"'>Home</a>";
-			homeButton = "<div class='ml-buttons ml-buttons-right'>"+home+"</div>";
-		}
+		// var homeButton = "";
+		// if(config.buttons.home) {
+		// 	// <a data-target="#layer2" class="ml-open">Layer2</a>
+		// 	home = "<a class='ml-open' href='#"+Strata.config.homeLayer+"'>Home</a>";
+		// 	homeButton = "<div class='ml-buttons ml-buttons-right'>"+home+"</div>";
+		// }
+		var homeButton = "<div class='ml-buttons ml-buttons-right'></div>";
 		template = template.replace('{{home}}', homeButton);
 
 		var title = config.title;
@@ -47,8 +58,8 @@
 
 	var getAvailableElementConfig = function(elementConfig, itemConfig){
 		if(elementConfig['config-header-title']) itemConfig.title = elementConfig['config-header-title'];
-		if(elementConfig['config-header-buttons-back'] === "false") itemConfig.buttons.back = false;
-		if(elementConfig['config-header-buttons-home'] === "false") itemConfig.buttons.home = false;
+		if(elementConfig['config-header-buttons-right']) itemConfig.buttons.right = elementConfig['config-header-buttons-right'];
+		if(elementConfig['config-header-buttons-left']) itemConfig.buttons.left = elementConfig['config-header-buttons-left'];
 		return itemConfig;
 	};
 
@@ -73,12 +84,17 @@
 					layer.element.addClass('ml-header-enabled');
 				} else {
 					layer.element.prepend(createHeader(layer,newConfig,'layer'));
+					layer.element.addClass('ml-has-header');
 				}
 			},
 			'openStart': function(Layer) {
 				Layer = Layer.layer;
+				var headerRight, headerLeft;
+
 				if(Layer.config.header.type === 'layer') {
 					$HTML.removeClass('ml-header-opened');
+					headerRight = Layer.element.find('.ml-header-layer .ml-buttons-right');
+					headerLeft = Layer.element.find('.ml-header-layer .ml-buttons-left');
 				} else {
 					$HTML.addClass('ml-header-opened');
 					var $SiteHeader = Strata.config.parent.find('.ml-header-site');
@@ -99,6 +115,24 @@
 					} else {
 						$SiteHeader.removeClass('ml-header-home');
 					}
+					headerRight = $SiteHeader.find('.ml-buttons-right');
+					headerLeft = $SiteHeader.find('.ml-buttons-left');
+				}
+
+				// reset buttons
+
+				headerLeft.html('');
+				headerRight.html('');
+				var leftButton = '', rightButton = '';
+				if(Layer.config.header.buttons.left != 'false') {
+					console.error('buttons', headerLeft);
+					leftButton = eval(Layer.config.header.buttons.left);
+					headerLeft.html(leftButton);
+				}
+
+				if(Layer.config.header.buttons.right != 'false') {
+					rightButton = eval(Layer.config.header.buttons.right);
+					headerRight.html(rightButton);
 				}
 			}
 		},
