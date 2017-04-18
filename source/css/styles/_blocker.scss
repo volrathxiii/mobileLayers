@@ -1,13 +1,4 @@
-$blocker-background: rgba(0,0,0,.5) !default;
-$blocker-filter-blur: 3px !default;
-
-%blocker-last-panel {
-	-webkit-filter: blur($blocker-filter-blur);
-	-moz-filter: blur($blocker-filter-blur);
-	-o-filter: blur($blocker-filter-blur);
-	-ms-filter: blur($blocker-filter-blur);
-	filter: blur($blocker-filter-blur);
-}
+$blocker-background: rgba(0,0,0,.2) !default;
 
 .ml-blocker {
 	position: absolute;

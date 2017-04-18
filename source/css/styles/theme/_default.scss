@@ -9,6 +9,8 @@ $theme-header-background : #f6f6f7;
 $theme-header-border: #d4d4d7;
 $theme-header-height: 50px;
 $theme-header-icon-size: 20px;
+$theme-icon-padding: 5px;
+$theme-header-button-width: 60px;
 
 // text
 $theme-text-header-size: 15px;
@@ -29,6 +31,7 @@ $theme-button-border: #ededed;
 @import 'theme_icons';
 @import 'theme_header';
 @import 'theme_layer';
+@import 'theme_blocker';
 
 * {
 	font-family: "Lucida Grande", "Arial";	

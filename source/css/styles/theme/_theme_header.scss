@@ -3,12 +3,14 @@
 	border-bottom: $theme-border-thinkness solid $theme-header-border;
 
 	.ml-buttons {
+		width: $theme-header-button-width;
+
 		a {
 			text-decoration: none;
 		}
 		.ml-button {
 			height: $theme-header-height;
-			width: $theme-header-height;
+			width: $theme-header-button-width;
 			line-height: $theme-header-height;
 			text-align: center;
 			top: 0;
@@ -20,6 +22,11 @@
 	.ml-title {
 		font-size: $theme-text-header-size;
 		font-weight: bold;
+
+		&-container {
+			margin-left: $theme-header-button-width;
+			margin-right: $theme-header-button-width;
+		}
 	}
 
 	&-site {
