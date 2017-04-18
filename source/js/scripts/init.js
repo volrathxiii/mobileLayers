@@ -2,4 +2,4 @@
  * Initialization
  */
 
-var mLayers = new MobileLayers();
+// var mLayers = new MobileLayers();

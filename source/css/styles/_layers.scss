@@ -4,8 +4,13 @@
 		width: 100%;
 		height: 100%;
 		z-index: 1;
-		overflow: auto;
-		transition: all .5s ease;
+		background: white;
+
+		&-container {
+			overflow: auto;
+			height: 100%;
+			position: relative;
+		}
 	}
 
 	&-last {
@@ -13,7 +18,6 @@
 	}
 
 	&-active {
-		background: red;
 		z-index: 3;
 	}
 }

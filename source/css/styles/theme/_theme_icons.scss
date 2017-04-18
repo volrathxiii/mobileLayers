@@ -1,0 +1,23 @@
+// main menu icon
+.ml-header {
+	// main menu icon
+	.ml-open[href='#menu'] {
+		@extend .icn;
+		@extend .icn-menu-hamburger;
+		font-size: $theme-header-icon-size;
+	}
+	// back icon
+	.ml-close {
+		&:before {
+			@extend .icn;
+			// position: absolute;
+			// left: $theme-icon-padding;
+			// display: inline;
+			float: left;
+			padding-left: $theme-icon-padding;
+		}
+
+		@extend .icn-menu-left;
+		// display: inline;
+	}
+}

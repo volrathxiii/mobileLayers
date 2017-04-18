@@ -2,10 +2,11 @@
  *	Layers
  */
 
-(function (window) {
+(function (Strata) {
 	// var __mLayersList = __mLayersList || {};
 
 	var _opened = false;
+
 	// Helpers
 	var GenerateID = function(prefix) {
 		return prefix+'_'+Math.round(new Date().getTime() + (Math.random() * 100000));
@@ -18,12 +19,18 @@
 
 	var LayerController = function(config) {
 		if(typeof config !== 'object') return false;
+		var _config = $.extend(true, {}, config);
+
 		this.id = false;
 		this.element = false;
 		this.active = false;
 		this.opened = false;
 		this.last = false;
-		this.config = config;
+		this.config = _config;
+	};
+
+	var moduleTrigger = function(action, parameters) {
+		Strata.modules.trigger({'controller':'layer','action':action,'parameters': parameters});
 	};
 
 	LayerController.prototype.create = function(element) {
@@ -41,39 +48,85 @@
 		if(elementId === 'undefined') elementId = GenerateID('mlayer');
 		this.id = elementId;
 
+		// get element attributes then set as config here
+		var elementConfig = Strata.configAttributeParse(element);
+		this.config = $.extend(true,this.config,elementConfig);
+
+		moduleTrigger('createStart',{'element':element});
+		this.config.parent.trigger('createLayerStart', element);
+
 		// if(typeof __mLayersList[this.id] === 'object') return;
 		var fadeInClass = 'ml-' + this.config.layer.type +'-'+ this.config.layer.position;
 		var typeClass = 'ml-' + this.config.layer.type;
 
 		var newLayerContent = $('<div>', {'class':'ml-layer-content'}).html(this.config.layer.template.replace('{{content}}', element.html()));
+
+		var newLayerContainer = $('<div>', {'class':'ml-layer-container'}).html(newLayerContent);
+
 		var newLayer = $('<div>', {
 			'class':'ml-layer '+ element.attr('class')+ ' '+typeClass+' ' +fadeInClass, 
 			'id': this.id
-		}).html(newLayerContent);
+		}).html(newLayerContainer);
 
 		element.remove();
 
 		this.element = newLayer;
 		this.config.parent.append(this.element);
+
+		moduleTrigger('createEnd',{'layer':this});
+		this.config.parent.trigger('createLayerEnd', this);
 		// __mLayersList[this.id] = this;
 	};
 
+	// setActive
+	LayerController.prototype.setActive = function(id) {
+		$.each(Strata.controllers.layers.list, function(layerID, layer) {
+			if(layerID === id) {
+				layer.active = true;
+				moduleTrigger('setActive',{'layer':layer});
+			} else {
+				layer.active = false;
+			}
+		});
+	};
 
 	// set active layer as opened
 	LayerController.prototype.setOpened = function() {
-		var current = LayersController.getOpened();
+		var current = Strata.controllers.layers.getOpened();
 		if(typeof current === 'object') current.opened = false;
-		// LayersController.getOpened().opened = false;
+		// Strata.controllers.layers.getOpened().opened = false;
 		this.opened = true;
 		_opened = this.id;
+		moduleTrigger('setOpened',{'layer':this});
 	};
 
 	// set as last item opened
-	LayerController.prototype.setLast = function() {
-		var current = LayersController.getLast();
-		if(typeof current === 'object') current.last = false;
-		// LayersController.getOpened().opened = false;
-		this.last = true;
+	LayerController.prototype.setLast = function(id) {
+		if(typeof id === 'undefined') id = this.id;
+		$.each(Strata.controllers.layers.list, function(layerID, layer) {
+			if(layerID === id) {
+				layer.last = true;
+				moduleTrigger('setLast',{'layer':layer});
+			} else {
+				layer.last = false;
+			}
+		});
+	};
+
+	var triggerBlocker = function(layer) {
+		// remove all blockers
+		Strata.config.parent.find('.ml-blocker').remove();
+		$('html').removeClass('ml-blocker-opened');
+		if(layer.config.layer.type === 'split' || layer.config.layer.type === 'popup') {
+			$('html').addClass('ml-blocker-opened');
+			var $blocker = $('<div>', {'class':'ml-blocker'});
+			$blocker.insertAfter(layer.element);
+
+			$blocker.off('click').on('click', function(e){
+				Strata.layers.closeLayer();
+			});
+			moduleTrigger('openBlocker',{'layer':layer});
+		}
 	};
 
 	LayerController.prototype.open = function() {
@@ -86,14 +139,16 @@
 		// if(typeof __mLayersList[ _opened ] === 'object') {
 		// 	__mLayersList[ _opened ].close();
 		// }
-		// var last = LayersController.getLast();
+		// var last = Strata.controllers.layers.getLast();
 		// console.error('error', last);
 		// if(last && last.id !== _this.id) last.close();
 
 		// set opened
 		// _opened = _this.id;
+		triggerBlocker(_this);
 
-		_this.setOpened();
+		this.setOpened();
+		this.setActive(this.id);
 
 		// do reset first
 		// @TODO Move to private function
@@ -102,13 +157,14 @@
 		// setTimeout(function(){
 		// 	$('html').removeClass('ml-reset').addClass('ml-opening');
 		// },1);
-
-		_this.element.trigger('beforeOpen', _this);
-		_this.element.removeClass('ml-last').addClass('ml-target ml-opening');
+		moduleTrigger('openStart',{'layer':this});
+		_this.element.trigger('openStart', _this);
+		_this.element.addClass('ml-target ml-opening');
 
 		setTimeout(function(){
 			_this.element.removeClass('ml-target ml-opening');
-			_this.element.trigger('afterOpen', _this);
+			moduleTrigger('openEnd',{'layer':_this});
+			_this.element.trigger('openEnd', _this);
 			// $('html').removeClass('ml-opening').addClass('ml-opened');
 		},_this.config.animation.time);
 	};
@@ -120,18 +176,19 @@
 	// };
 
 	LayerController.prototype.close = function() {
-		console.log('close', this);
 		var _this = this;
+		moduleTrigger('closeStart',{'layer':this});
 		_this.element.trigger('beforeClose', _this);
 		_this.element.removeClass('ml-active').addClass('ml-closing');
 
 		setTimeout(function(){
 			_this.element.removeClass('ml-closing');
 			_this.setLast();
-			_this.element.trigger('afterClose', _this);
+			moduleTrigger('closeEnd',{'layer':_this});
+			_this.element.trigger('closeEnd', _this);
 		},_this.config.animation.time);
 	};
 
-	window.LayerController = LayerController;
+	Strata.controllers.layer = LayerController;
 
-}(window));
+}(Strata));

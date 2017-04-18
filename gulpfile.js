@@ -27,8 +27,8 @@ var TESTS_DIR = './tests';
 var STYLES_DIR = SOURCE_DIR + '/css/styles';
 var SCRIPTS_DIR = SOURCE_DIR + '/js/scripts';
 var SCRIPT_MODULES_DIR = SCRIPTS_DIR+'/modules';
-var SCRIPT_FILE_NAME = 'mobilelayer.dev.js';
-var STYLE_FILE_NAME = 'mobilelayer.dev.css';
+var SCRIPT_FILE_NAME = 'strata.dev.js';
+var STYLE_FILE_NAME = 'strata.dev.css';
 var SCRIPT_FILE = SOURCE_DIR + '/' + SCRIPT_FILE_NAME;
 var STYLE_FILE = SOURCE_DIR + '/' + STYLE_FILE_NAME;
 
@@ -114,9 +114,9 @@ gulp.task('build-js',['clean-source:js','gitInfo'], function()
 	d = new Date(),
 	headerComment = '/*!\n * Branch: ' + gitBranch + '\n * Commit: #' + gitHash + '\n * Date: ' + d +'\n */\n';
 	return gulp.src( [
-		SCRIPTS_DIR+'/layers.controller.js',
+		SCRIPTS_DIR+'/strata.model.js',
 		SCRIPTS_DIR+'/layer.controller.js',
-		SCRIPTS_DIR+'/mobilelayers.js',
+		SCRIPTS_DIR+'/layers.controller.js',
 		SCRIPT_MODULES_DIR+'/**/*.js',
 		SCRIPTS_DIR+'/init.js',
 		] )

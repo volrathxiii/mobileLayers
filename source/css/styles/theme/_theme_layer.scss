@@ -1,0 +1,21 @@
+.ml-layer {
+	background: $theme-layer-background;
+	color: $theme-text-color;
+	font-size: $theme-text-size;
+
+	&-container {
+		padding-left: $theme-side-space;
+		padding-right: $theme-side-space;
+		padding-bottom: $theme-side-space*2;
+	}
+}
+
+html.ml-blocker-opened {
+	.ml-layer.ml-last, .ml-header.ml-header-site {
+		-webkit-filter: blur(3px);
+		-moz-filter: blur(3px);
+		-o-filter: blur(3px);
+		-ms-filter: blur(3px);
+		filter: blur(3px);
+	}
+}
