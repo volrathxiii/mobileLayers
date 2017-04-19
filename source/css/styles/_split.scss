@@ -4,7 +4,7 @@ $split-width: 80%;
 	// enters from left
 	top: 0;
 	width: $split-width;
-	z-index: 6;
+	z-index: 25;
 
 	&.ml-active {
 		-webkit-box-shadow: 0px 0px 20px -1px rgba(0,0,0,0.5);
