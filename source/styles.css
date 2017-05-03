@@ -1,7 +1,7 @@
 /*!
- * Branch: master
- * Commit: #dd04322
- * Date: Thu Apr 20 2017 00:51:33 GMT+0800 (+08)
+ * Branch: alpha-0-1
+ * Commit: #7972533
+ * Date: Sun Apr 23 2017 00:13:23 GMT+0800 (+08)
  */
 /**
  *	mobileLayers.scss
@@ -9,17 +9,25 @@
 * {
   box-sizing: border-box; }
 
-html.ml-inited body {
-  margin: 0;
-  min-height: 100%; }
-  html.ml-inited body * {
-    -webkit-font-smoothing: antialiased; }
+html.ml-inited {
+  overflow: hidden;
+  position: relative;
+  top: 0; }
+  html.ml-inited body {
+    overflow: hidden;
+    margin: 0;
+    min-height: 100%;
+    position: relative;
+    top: 0; }
+    html.ml-inited body * {
+      -webkit-font-smoothing: antialiased; }
 
 .ml-site-wrapper {
   height: 100%;
   width: 100%;
   position: relative;
-  overflow: hidden; }
+  overflow: hidden;
+  top: 0; }
 
 .ml-config {
   display: none !important; }
