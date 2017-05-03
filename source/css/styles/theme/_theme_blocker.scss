@@ -1,0 +1,13 @@
+$theme-blocker-opacity: .5;
+$theme-blocker-color-stop1: rgba(74,74,74,$theme-blocker-opacity);
+$theme-blocker-color-stop2: rgba(43,43,43,$theme-blocker-opacity);
+
+.ml-blocker {
+	background: $theme-blocker-color-stop1;
+	background: -moz-linear-gradient(top, $theme-blocker-color-stop1 0%, $theme-blocker-color-stop2 100%);
+	background: -webkit-gradient(left top, left bottom, color-stop(0%, $theme-blocker-color-stop1), color-stop(100%, $theme-blocker-color-stop2));
+	background: -webkit-linear-gradient(top, $theme-blocker-color-stop1 0%, $theme-blocker-color-stop2 100%);
+	background: -o-linear-gradient(top, $theme-blocker-color-stop1 0%, $theme-blocker-color-stop2 100%);
+	background: -ms-linear-gradient(top, $theme-blocker-color-stop1 0%, $theme-blocker-color-stop2 100%);
+	background: linear-gradient(to bottom, $theme-blocker-color-stop1 0%, $theme-blocker-color-stop2 100%);	
+}

@@ -1,0 +1,36 @@
+{
+  "name": "mobileLayers.js",
+  "version": "1.0.0",
+  "description": "Layers for mobile",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:volrathxiii/mobileLayers.git"
+  },
+  "author": "volrathxiii",
+  "license": "ISC",
+  "devDependencies": {
+    "backstopjs": "^2.6.7",
+    "browser-sync": "^2.12.5",
+    "del": "latest",
+    "git-rev": "latest",
+    "gulp": "^3.9.1",
+    "gulp-coffee": "latest",
+    "gulp-concat": "latest",
+    "gulp-connect": "latest",
+    "gulp-eslint": "^3.0.1",
+    "gulp-header": "latest",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest",
+    "gulp-sourcemaps": "latest",
+    "gulp-strip-comments": "latest",
+    "gulp-uglify": "latest",
+    "gulp-util": "latest",
+    "http-proxy": "latest",
+    "url": "latest",
+    "url-exists": "latest"
+  }
+}

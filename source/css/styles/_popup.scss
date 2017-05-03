@@ -1,0 +1,44 @@
+$popup-height: 80% !default;
+$popup-width: 80% !default;
+$popup-radius: 10px;
+
+.ml-layer.ml-popup {
+	width: $popup-width;
+	max-height: $popup-height;
+	left: 50%;
+    top: 50%;
+    @include transform(translate(-50%,-50%));
+	-webkit-border-radius: $popup-radius; 
+	-moz-border-radius: $popup-radius; 
+	border-radius: $popup-radius; 
+	z-index: 0;
+	opacity: 0;
+	transition: opacity $animation-time ease;
+
+	.ml-header-layer {
+		-webkit-border-radius: $popup-radius $popup-radius 0 0 ; 
+		-moz-border-radius: $popup-radius $popup-radius 0 0; 
+		border-radius: $popup-radius $popup-radius 0 0; 
+	}
+
+	&.ml-active {
+		z-index: 30;
+		opacity: 1;
+	}
+}
+
+html.ml-popup {
+	.ml-header-site {
+		left: 0;
+	}
+	.ml-layer.ml-last {
+		top: 0 !important;
+		left: 0 !important;
+	}
+
+	&.ml-blocker-opened {
+		.ml-header-site {
+	    	z-index: 3;
+		}
+	}
+}

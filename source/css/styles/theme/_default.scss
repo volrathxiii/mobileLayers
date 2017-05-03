@@ -1,0 +1,89 @@
+// theme variables goes here
+$theme-side-space: 15px;
+$theme-border-thinkness: 1px;
+$theme-top-spacing: 20px;
+$theme-clickable-space: 40px;
+$theme-default-line-height: 30px;
+// header
+$theme-header-background : #f6f6f7;
+$theme-header-border: #d4d4d7;
+$theme-header-height: 50px;
+$theme-header-icon-size: 20px;
+$theme-icon-padding: 5px;
+$theme-header-button-width: 60px;
+
+// text
+$theme-text-header-size: 15px;
+$theme-text-size: 14px;
+$theme-text-size-small: 12px;
+$theme-text-color: #090909;
+$theme-text-color-alternate: #fff;
+$theme-text-color-label: #787878;
+$theme-text-color-highlight: #156aff;
+$theme-text-color-disabled: #bbbcbc;
+
+// layer
+$theme-layer-background: #eaeaea;
+$theme-button-border: #ededed;
+
+
+@import 'glyphicons';
+@import 'theme_icons';
+@import 'theme_header';
+@import 'theme_layer';
+@import 'theme_blocker';
+
+* {
+	font-family: "Lucida Grande", "Arial";	
+}
+
+label {
+	padding-top: $theme-top-spacing;
+	text-transform: uppercase;
+	color: $theme-text-color-label;
+	display: block;
+	line-height: $theme-default-line-height;
+	font-weight: bold;
+}
+
+p {
+	color: $theme-text-color-label;
+	margin-top: 0;
+}
+
+.list-item {
+	margin: 0 ($theme-side-space * -1);
+	> * {
+		display: block;
+		padding: 0 $theme-side-space;
+		background: $theme-text-color-alternate;
+		line-height: $theme-clickable-space;
+		color: $theme-text-color;
+		text-decoration: none;
+		border-bottom: $theme-border-thinkness solid $theme-button-border;
+	}
+
+	.ml-open {
+		// @extend .icn;
+		@extend .icn-menu-right;
+
+		padding-right: $theme-side-space * 2;
+		
+		&:before {
+			font-family: 'Glyphicons Halflings';
+			position: absolute;
+			right: $theme-side-space;
+			font-size: $theme-text-size;
+			color: $theme-text-color-disabled;
+		}
+	}
+}
+
+.pull-right {
+	float: right;
+}
+
+.faded {
+	color: $theme-text-color-disabled;
+}
+
