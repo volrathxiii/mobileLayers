@@ -58,6 +58,11 @@
 			return history[ history.length - 2 ];
 		};
 
+		var getLastByElement = function() {
+			var lastElement = Strata.config.parent.find('.ml-layer.ml-last');
+			return get(lastElement.attr('id'));
+		};
+
 		var setLastActive = function() {
 			$.each(list, function(layerID,layer){
 				if(layer.last) {
@@ -80,21 +85,43 @@
 			});
 		};
 
+		var _deletePreviousLayersHistory = function(targetLayer) {
+			var found = false, hindex = false;
+			$.each(history, function(hid, layer) {
+				if(found === false && targetLayer === layer.id) {
+					found = true;
+					hindex = hid + 1;
+				}
+				if(found && targetLayer !== layer.id) {
+					list[layer.id].element.removeClass('ml-opened');
+					list[layer.id].resetState();
+					// delete history[hid];
+				}
+			});
+			if(hindex !== false) {
+				history.splice(hindex, history.length);
+			}
+		};
+
 		var openLayer = function(id) {
 			if(get(id)) {
 				var LastLayer = getOpened();
-				if(LastLayer) LastLayer.setLast(LastLayer.id);
 
 				// set direction
 				if(list[id].element.hasClass('ml-opened')) {
 					HTML.removeClass('ml-next').addClass('ml-back');
 					getOpened().element.removeClass('ml-opened');
-					history.pop();
+					// if is opened reset other layers that was previously opened after target layer
+
+					_deletePreviousLayersHistory(id);
+
 				}else{
 					HTML.removeClass('ml-back').addClass('ml-next');
 					history.push( list[ id ] );
 					list[ id ].element.addClass('ml-opened');
 				}
+
+				if(LastLayer) LastLayer.setLast(LastLayer.id);
 				// $('html').removeClass('ml-previous').addClass('ml-next');
 				// set last layercontroller
 				
@@ -107,9 +134,23 @@
 		};
 
 		// closes active layer, do back
-		var closeLayer = function() {
+		var tailLayer = function() {
 			var activeLayer = getOpened();
 			var lastLayer = getLast();
+			
+			if(activeLayer && lastLayer) {
+				// $('html').removeClass('ml-next').addClass('ml-previous');
+				activeLayer.element.removeClass('ml-opened');
+				moduleTrigger('closeLayerStart',{'layer': activeLayer});
+				openLayer(lastLayer.id);
+				moduleTrigger('closeLayerEnd',{'layer': activeLayer});
+			}
+		};
+
+		// close current layer and open last active based on html tree since it was poped by the last open
+		var closeLayer = function() {
+			var activeLayer = getOpened();
+			var lastLayer = getLastByElement();
 			
 			if(activeLayer && lastLayer) {
 				// $('html').removeClass('ml-next').addClass('ml-previous');
@@ -168,6 +209,12 @@
 			});
 
 			// add option to back into specific layer by triggering ml-open
+			$(document).on('click', '.ml-tail', function(e){
+				e.stopPropagation();
+				e.preventDefault();
+				tailLayer();
+			});
+
 			$(document).on('click', '.ml-close', function(e){
 				e.stopPropagation();
 				e.preventDefault();
@@ -208,6 +255,7 @@
 			'getOpened':  getOpened,
 			'getLast': getLast,
 			'openLayer': openLayer,
+			'tailLayer': tailLayer,
 			'closeLayer': closeLayer,
 			'setActive': setActive,
 			'autoLayers': autoLayers

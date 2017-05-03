@@ -78,6 +78,12 @@
 		// __mLayersList[this.id] = this;
 	};
 
+	LayerController.prototype.resetState = function() {
+		this.active = false;
+		this.opened = false;
+		this.last = false;
+	};
+
 	// setActive
 	LayerController.prototype.setActive = function(id) {
 		$.each(Strata.controllers.layers.list, function(layerID, layer) {

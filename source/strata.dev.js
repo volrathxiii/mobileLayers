@@ -1,7 +1,7 @@
 /*!
- * Branch: alpha-0-1
- * Commit: #e32ed3e
- * Date: Tue Apr 18 2017 23:42:32 GMT+0800 (+08)
+ * Branch: master
+ * Commit: #dd04322
+ * Date: Thu Apr 20 2017 00:47:29 GMT+0800 (+08)
  */
 (function (window) {
 	var Strata = function(){
@@ -210,6 +210,12 @@
 		this.config.parent.trigger('createLayerEnd', this);
 	};
 
+	LayerController.prototype.resetState = function() {
+		this.active = false;
+		this.opened = false;
+		this.last = false;
+	};
+
 	LayerController.prototype.setActive = function(id) {
 		$.each(Strata.controllers.layers.list, function(layerID, layer) {
 			if(layerID === id) {
@@ -327,6 +333,11 @@
 			return history[ history.length - 2 ];
 		};
 
+		var getLastByElement = function() {
+			var lastElement = Strata.config.parent.find('.ml-layer.ml-last');
+			return get(lastElement.attr('id'));
+		};
+
 		var setLastActive = function() {
 			$.each(list, function(layerID,layer){
 				if(layer.last) {
@@ -349,20 +360,39 @@
 			});
 		};
 
+		var _deletePreviousLayersHistory = function(targetLayer) {
+			var found = false, hindex = false;
+			$.each(history, function(hid, layer) {
+				if(found === false && targetLayer === layer.id) {
+					found = true;
+					hindex = hid + 1;
+				}
+				if(found && targetLayer !== layer.id) {
+					list[layer.id].element.removeClass('ml-opened');
+					list[layer.id].resetState();
+				}
+			});
+			if(hindex !== false) {
+				history.splice(hindex, history.length);
+			}
+		};
+
 		var openLayer = function(id) {
 			if(get(id)) {
 				var LastLayer = getOpened();
-				if(LastLayer) LastLayer.setLast(LastLayer.id);
 
 				if(list[id].element.hasClass('ml-opened')) {
 					HTML.removeClass('ml-next').addClass('ml-back');
 					getOpened().element.removeClass('ml-opened');
-					history.pop();
+					_deletePreviousLayersHistory(id);
+
 				}else{
 					HTML.removeClass('ml-back').addClass('ml-next');
 					history.push( list[ id ] );
 					list[ id ].element.addClass('ml-opened');
 				}
+
+				if(LastLayer) LastLayer.setLast(LastLayer.id);
 				setActive(id);
 				moduleTrigger('openLayerStart',{'layer': list[ id ]});
 				list[ id ].open();
@@ -371,9 +401,21 @@
 			}
 		};
 
-		var closeLayer = function() {
+		var tailLayer = function() {
 			var activeLayer = getOpened();
 			var lastLayer = getLast();
+
+						if(activeLayer && lastLayer) {
+				activeLayer.element.removeClass('ml-opened');
+				moduleTrigger('closeLayerStart',{'layer': activeLayer});
+				openLayer(lastLayer.id);
+				moduleTrigger('closeLayerEnd',{'layer': activeLayer});
+			}
+		};
+
+		var closeLayer = function() {
+			var activeLayer = getOpened();
+			var lastLayer = getLastByElement();
 
 						if(activeLayer && lastLayer) {
 				activeLayer.element.removeClass('ml-opened');
@@ -427,6 +469,12 @@
 				}
 			});
 
+			$(document).on('click', '.ml-tail', function(e){
+				e.stopPropagation();
+				e.preventDefault();
+				tailLayer();
+			});
+
 			$(document).on('click', '.ml-close', function(e){
 				e.stopPropagation();
 				e.preventDefault();
@@ -466,6 +514,7 @@
 			'getOpened':  getOpened,
 			'getLast': getLast,
 			'openLayer': openLayer,
+			'tailLayer': tailLayer,
 			'closeLayer': closeLayer,
 			'setActive': setActive,
 			'autoLayers': autoLayers
